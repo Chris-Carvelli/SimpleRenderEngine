@@ -43,6 +43,10 @@
 #  License text for the above reference.)
 
 message("<FindSDL2_image.cmake>")
+
+set(SDL2_PATH ${CMAKE_SOURCE_DIR}-libs/SDL2_image)
+
+
 find_path(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
         HINTS
         ENV SDL2IMAGEDIR
@@ -50,8 +54,11 @@ find_path(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
         PATH_SUFFIXES SDL2
         # path suffixes to search inside ENV{SDLDIR}
         include/SDL2 include
-        PATHS ${SDL2_PATH}
+        PATHS
+            ${SDL2_PATH}
         )
+
+
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(VC_LIB_PATH_SUFFIX lib/x64)
@@ -64,9 +71,22 @@ find_library(SDL2_IMAGE_LIBRARY
         HINTS
         ENV SDL2IMAGEDIR
         ENV SDL2DIR
-        PATH_SUFFIXES lib ${VC_LIB_PATH_SUFFIX}
+        PATH_SUFFIXES lib lib/x64 lib/x86 ${VC_LIB_PATH_SUFFIX}
+        ${CMAKE_SOURCE_DIR}-libs/SDL2_image
         PATHS ${SDL2_PATH}
         )
+
+if(WIN32)
+     find_file(SDL2_IMAGE_LIBRARY_SHARED
+        NAMES SDL2_image.dll
+        PATH_SUFFIXES lib lib/x64 lib/x86
+        ${CMAKE_SOURCE_DIR}-libs/SDL2_image
+        PATHS ${SDL2_PATH}
+    )
+    get_filename_component(SDL2_IMAGE_SHARED_PATH ${SDL2_IMAGE_LIBRARY_SHARED} DIRECTORY)
+    set(SDL2_IMAGE_SHARED_LIBS "${SDL2_IMAGE_LIBRARY_SHARED}" "${SDL2_IMAGE_SHARED_PATH}/optional/libtiff-5.dll" "${SDL2_IMAGE_SHARED_PATH}/optional/libwebp-7.dll")
+message(424243 ${SDL2_IMAGE_LIBRARY_SHARED})
+endif(WIN32)
 
 if(SDL2_IMAGE_INCLUDE_DIR AND EXISTS "${SDL2_IMAGE_INCLUDE_DIR}/SDL_image.h")
   file(STRINGS "${SDL2_IMAGE_INCLUDE_DIR}/SDL_image.h" SDL_IMAGE_VERSION_MAJOR_LINE REGEX "^#define[ \t]+SDL_IMAGE_MAJOR_VERSION[ \t]+[0-9]+$")

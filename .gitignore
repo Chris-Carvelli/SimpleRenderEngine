@@ -12,6 +12,7 @@ bin/
 *.suo
 *.user
 *.sln.docstates
+.vs/
 
 # Build results
 
@@ -140,3 +141,6 @@ App_Data/*.ldf
 .idea/
 project/
 imgui.ini
+
+# cmake local
+CMakeSettings.json

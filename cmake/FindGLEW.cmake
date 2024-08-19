@@ -11,6 +11,9 @@
 
 include(FindPackageHandleStandardArgs)
 
+# TMP
+set(GLEW_LOCATION ${CMAKE_SOURCE_DIR}-libs/glew)
+
 if (WIN32)
     find_path( GLEW_INCLUDE_DIR
         NAMES
@@ -23,6 +26,7 @@ if (WIN32)
             ${GLEW_LOCATION}
             $ENV{GLEW_LOCATION}
             DOC "The directory where GL/glew.h resides" )
+
     find_file( GLEW_SOURCE
         NAMES
             glew.c
@@ -37,7 +41,7 @@ if (WIN32)
     if(ARCH STREQUAL "x86")
       find_library( GLEW_LIBRARY
           NAMES
-              glew GLEW glew32s glew32
+              glew GLEW glew32sd glew32
           PATHS
               ${GLEW_LOCATION}/lib
               ${GLEW_LOCATION}/lib/x86
@@ -62,10 +66,11 @@ if (WIN32)
     else()
       find_library( GLEW_LIBRARY
           NAMES
-              glew GLEW glew32s glew32
+              glew GLEW glew32sd glew32s glew32
           PATHS
               ${GLEW_LOCATION}/lib/x64
               ${GLEW_LOCATION}/lib/Release/x64
+              ${GLEW_LOCATION}/lib/Debug/x64
               ${GLEW_LOCATION}/lib/Release MX/x64
               $ENV{GLEW_LOCATION}/lib/x64
               $ENV{GLEW_LOCATION}/lib/Release/x64
@@ -112,7 +117,40 @@ if (${CMAKE_HOST_UNIX})
             /opt/local/lib
             NO_DEFAULT_PATH
             DOC "The GLEW library")
+else()
+    find_path( GLEW_INCLUDE_DIR
+        NAMES
+            GL/glew.h
+        PATHS
+            ${CMAKE_SOURCE_DIR}-libs/glew
+            ${GLEW_LOCATION}/include
+            $ENV{GLEW_LOCATION}/include
+            /usr/include
+            /usr/local/include
+            /sw/include
+            /opt/local/include
+            NO_DEFAULT_PATH
+            DOC "The directory where GL/glew.h resides"
+        PATH_SUFFIXES include
+    )
+    find_library( GLEW_LIBRARY
+        NAMES
+            GLEW glew
+        PATHS
+            ${CMAKE_SOURCE_DIR}-libs/glew
+            ${GLEW_LOCATION}/lib
+            $ENV{GLEW_LOCATION}/lib
+            /usr/lib64
+            /usr/lib
+            /usr/local/lib64
+            /usr/lib/x86_64-linux-gnu
+            /usr/local/lib
+            /sw/lib
+            /opt/local/lib
+            NO_DEFAULT_PATH
+            DOC "The GLEW library")
 endif ()
+
 
 if (GLEW_INCLUDE_DIR AND EXISTS "${GLEW_INCLUDE_DIR}/GL/glew.h")
 
@@ -149,3 +187,4 @@ find_package_handle_standard_args(GLEW DEFAULT_MSG
 endif()
 
 mark_as_advanced( GLEW_FOUND )
+
