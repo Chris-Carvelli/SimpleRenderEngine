@@ -284,7 +284,7 @@ namespace sre {
                 static auto unlitMat = Shader::getUnlit()->createMaterial();
 
                 bool hasNormals = mesh->getNormals().size()>0;
-                auto mat = hasNormals ? litMat : unlitMat;
+                auto& mat = hasNormals ? litMat : unlitMat;
                 auto sharedPtrMesh = mesh->shared_from_this();
                 float rotationSpeed = 0.001f;
 
@@ -329,11 +329,11 @@ namespace sre {
             }
             if (ImGui::TreeNode("Uniforms")) {
                 auto uniformNames = shader->getUniformNames();
-                for (auto a : uniformNames){
-                    auto type = shader->getUniform(a);
+                for (auto& uniform_name : uniformNames){
+                    auto type = shader->getUniform(uniform_name);
                     std::string typeStr = glUniformToString(type.type);
                     typeStr = appendSize(typeStr, type.arraySize);
-                    ImGui::LabelText(a.c_str(), typeStr.c_str());
+                    ImGui::LabelText(uniform_name.c_str(), typeStr.c_str());
                 }
                 ImGui::TreePop();
             }
@@ -766,7 +766,7 @@ namespace sre {
         if (ImGui::TreeNode("Light")){
 
             int id = 0;
-            for (auto l : lights->lights){
+            for (auto& l : lights->lights){
                 ImGui::PushID(&l);
                 ImGui::LabelText("Light", "%i",id++);
                 ImGui::LabelText("Light type ", l.lightType==LightType::Directional?"Directional":l.lightType==LightType::Point?"Point":"Unused");
@@ -815,7 +815,7 @@ namespace sre {
         std::smatch m;
 
         for (auto& err : errors){
-            auto trimmedStr = err;
+            auto& trimmedStr = err;
             auto idx = err.find("##");
             int filter = -1;
             if (idx > 0){
@@ -930,7 +930,7 @@ namespace sre {
         if (compile){
             auto builder = shader->update();
             for (int i=0;i<shaderTypes.size();i++){
-                auto filename = shader->shaderSources[shaderTypes[i]];
+                auto& filename = shader->shaderSources[shaderTypes[i]];
                 Resource::set(filename, shaderCode[i]);
                 builder.withSourceResource(filename, shaderTypes[i]);
             }
