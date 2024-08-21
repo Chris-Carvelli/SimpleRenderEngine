@@ -44,7 +44,7 @@
 
 message("<FindSDL2_image.cmake>")
 
-set(SDL2_PATH ${CMAKE_SOURCE_DIR}-libs/SDL2_image)
+set(SDL2_PATH "${SRE_LIBS_PATH}/SDL2_image")
 
 
 find_path(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
@@ -66,13 +66,13 @@ else()
   set(VC_LIB_PATH_SUFFIX lib/x86)
 endif()
 
+message(AAAAAAAAAAAAAAAAAAAAAAAA)
 find_library(SDL2_IMAGE_LIBRARY
         NAMES SDL2_image
         HINTS
         ENV SDL2IMAGEDIR
         ENV SDL2DIR
         PATH_SUFFIXES lib lib/x64 lib/x86 ${VC_LIB_PATH_SUFFIX}
-        ${CMAKE_SOURCE_DIR}-libs/SDL2_image
         PATHS ${SDL2_PATH}
         )
 
@@ -80,7 +80,6 @@ if(WIN32)
      find_file(SDL2_IMAGE_LIBRARY_SHARED
         NAMES SDL2_image.dll
         PATH_SUFFIXES lib lib/x64 lib/x86
-        ${CMAKE_SOURCE_DIR}-libs/SDL2_image
         PATHS ${SDL2_PATH}
     )
     get_filename_component(SDL2_IMAGE_SHARED_PATH ${SDL2_IMAGE_LIBRARY_SHARED} DIRECTORY)

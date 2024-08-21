@@ -11,8 +11,7 @@
 
 include(FindPackageHandleStandardArgs)
 
-# TMP
-set(GLEW_LOCATION ${CMAKE_SOURCE_DIR}-libs/glew)
+set(GLEW_LOCATION "${SRE_LIBS_PATH}/glew")
 
 if (WIN32)
     find_path( GLEW_INCLUDE_DIR
@@ -122,7 +121,6 @@ else()
         NAMES
             GL/glew.h
         PATHS
-            ${CMAKE_SOURCE_DIR}-libs/glew
             ${GLEW_LOCATION}/include
             $ENV{GLEW_LOCATION}/include
             /usr/include
@@ -137,7 +135,6 @@ else()
         NAMES
             GLEW glew
         PATHS
-            ${CMAKE_SOURCE_DIR}-libs/glew
             ${GLEW_LOCATION}/lib
             $ENV{GLEW_LOCATION}/lib
             /usr/lib64

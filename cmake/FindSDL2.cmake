@@ -67,10 +67,8 @@
 
 message("<FindSDL2.cmake>")
 
-
-SET(SDL2_SEARCH_PATHS
-		${CMAKE_SOURCE_DIR}-libs/SDL2
-		)
+set(SDL2_SEARCH_PATHS "${SRE_LIBS_PATH}/SDL2")
+message(424242 " " ${SRE_LIBS_PATH})
 		
 FIND_PATH(SDL2_INCLUDE_DIR SDL.h
 		PATH_SUFFIXES include/SDL2 include
