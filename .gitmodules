@@ -9,4 +9,4 @@
 	url = https://github.com/kazuho/picojson.git
 [submodule "submodules/ImGuiColorTextEdit"]
 	path = submodules/ImGuiColorTextEdit
-	url = https://github.com/chris-carvelli/ImGuiColorTextEdit.git
+	url = https://github.com/Chris-Carvelli/ImGuiColorTextEdit.git
