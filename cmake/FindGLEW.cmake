@@ -12,6 +12,7 @@
 include(FindPackageHandleStandardArgs)
 
 set(GLEW_LOCATION "${SRE_LIBS_PATH}/glew")
+message("424242(glew): " ${SRE_LIBS_PATH})
 
 if (WIN32)
     find_path( GLEW_INCLUDE_DIR
