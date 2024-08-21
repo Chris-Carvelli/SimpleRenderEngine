@@ -101,7 +101,7 @@ namespace sre {
     }
 
     Inspector::Inspector(int frames)
-            :frames(frames),frameCount(0)
+            :frames(frames),frameCount(0),time(0)
     {
         stats.resize(frames);
         millisecondsFrameTime.resize(frames);

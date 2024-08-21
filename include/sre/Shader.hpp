@@ -63,9 +63,9 @@ namespace sre {
 
     struct DllExport Uniform {
 		std::string name;
-        int id;
-        UniformType type;
-        int arraySize;                  // 1 means not array
+        int id            = -1;
+        UniformType type = UniformType::Invalid;
+        int arraySize    = 1;                  // 1 means not array
     };
 
     enum class StencilFunc {
