@@ -199,9 +199,9 @@ namespace sre {
             }
             if (ImGui::TreeNode("Mesh Data")) {
                 auto interleavedData = mesh->getInterleavedData();
-                auto attributes = mesh->attributeByName;
+                auto& attributes = mesh->attributeByName;
                 for (auto& att : attributes){
-                    auto attributeName = att.first;
+                    auto& attributeName = att.first;
                     if (ImGui::TreeNode(attributeName.c_str())) {
                         auto attributeType = att.second.attributeType;
                         auto attributeTypeStr = std::to_string(attributeType);
@@ -319,7 +319,7 @@ namespace sre {
             }
             if (ImGui::TreeNode("Attributes")) {
                 auto attributeNames = shader->getAttributeNames();
-                for (auto a : attributeNames){
+                for (auto& a : attributeNames){
                     auto type = shader->getAttibuteType(a);
                     std::string typeStr = glEnumToString(type.first);
                     typeStr = appendSize(typeStr, type.second);
@@ -338,7 +338,7 @@ namespace sre {
                 ImGui::TreePop();
             }
             if (ImGui::TreeNode("Specialization")) {
-                for (auto a : specialization ){
+                for (auto& a : specialization ){
                     ImGui::LabelText(a.first.c_str(), a.second.c_str());
                 }
                 ImGui::TreePop();
@@ -814,7 +814,7 @@ namespace sre {
 
         std::smatch m;
 
-        for (auto err : errors){
+        for (auto& err : errors){
             auto trimmedStr = err;
             auto idx = err.find("##");
             int filter = -1;
@@ -854,7 +854,7 @@ namespace sre {
             activeShaders.clear();
             shaderTypes.clear();
 
-            for (auto source : shader->shaderSources){
+            for (auto& source : shader->shaderSources){
                 auto source_ = Resource::loadText(source.second);
                 shaderCode.emplace_back(source_);
                 shaderTypes.push_back(source.first);
@@ -1012,7 +1012,7 @@ namespace sre {
             ImGui::Combo("Sprite names", index, ss_str.c_str());
 
             if (*index != -1){
-                auto name = pAtlas->getNames()[*index];
+                auto& name = pAtlas->getNames()[*index];
                 Sprite sprite = pAtlas->get(name);
                 ImGui::LabelText("Sprite anchor","(%.2f,%.2f)",sprite.getSpriteAnchor().x,sprite.getSpriteAnchor().y);
                 ImGui::LabelText("Sprite size","%ix%i",sprite.getSpriteSize().x,sprite.getSpriteSize().y);
