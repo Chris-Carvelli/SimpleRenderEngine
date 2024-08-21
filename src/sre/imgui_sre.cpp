@@ -474,7 +474,10 @@ bool ImGui_SRE_Init(SDL_Window *window)
     SDL_SysWMinfo wmInfo;
     SDL_VERSION(&wmInfo.version);
     SDL_GetWindowWMInfo(window, &wmInfo);
-    io.ImeWindowHandle = wmInfo.info.win.window;
+
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    if (viewport != nullptr)
+        viewport->PlatformHandleRaw = wmInfo.info.win.window;
 #else
     (void)window;
 #endif
