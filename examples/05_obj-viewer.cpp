@@ -223,8 +223,8 @@ public:
         ImVec2 imPos(0, 0);
         ImGui::SetNextWindowSize(imSize);                                   // imgui window size should have same width as SDL window size
         ImGui::SetNextWindowPos(imPos);
-        ImGui::Begin("",nullptr,ImGuiWindowFlags_NoInputs|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoTitleBar);
-                                                                            // create window without title
+        ImGui::Begin("Viewer",nullptr,ImGuiWindowFlags_NoInputs|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoTitleBar);
+                                                                            // create window
         auto txtSize = ImGui::CalcTextSize(txt.c_str());                    // center text
         ImGui::SetCursorPosX((imSize.x-txtSize.x)/2);
         ImGui::TextWrapped(txt.c_str());
