@@ -3,15 +3,10 @@ SET(scr_files 00_hello-engine 01_hello-engine-raw 02_spheres 03_spinning-cube 04
 # Create custom build targets
 FOREACH(scr_file ${scr_files})
     add_executable(SRE-Example-${scr_file} ${scr_file}.cpp)
-    target_link_libraries(SRE-Example-${scr_file} SRE ${EXTRA_LIBS} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${OPENVR_LIB})
-    #target_include_directories(SRE-Example-${scr_file} PRIVATE ${sdl2_SOURCE_DIR}/include)
+    target_link_libraries(SRE-Example-${scr_file} SRE ${SRE_LIBRARIES})
 ENDFOREACH()
 
 file(COPY ../examples_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 IF (WIN32)
-    SET(SDL2_image_lib_path "" CACHE PATH "Where the SDL2_image.dll can be found")
-	IF (USE_OPENVR)	
-		SET(DLLFileList "${SDL2_IMAGE_SHARED_LIBS}" "${OPENVR_ROOT_DIR}/bin/${OPENVR_PLATFORM}/openvr_api.dll")
-	ENDIF (USE_OPENVR)
-    file(COPY ${SDL2_IMAGE_SHARED_LIBS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    file(COPY ${SRE_LIBRARIES_SHARED} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 ENDIF(WIN32)

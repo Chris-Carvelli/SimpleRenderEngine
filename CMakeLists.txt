@@ -15,9 +15,11 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# where to look for cmake "find" modules
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# custom, centralized path to dependencies
 set(SRE_LIBS_PATH "" CACHE PATH "Path to the SimpleRenderEngine libraries")
-message(424243 " " ${SRE_LIBS_PATH})
 
 find_package(SDL2 REQUIRED)
 set(SRE_INCLUDE_DIRS ${SDL2_INCLUDE_DIR})
@@ -30,27 +32,43 @@ IF(APPLE)
     list(APPEND SRE_INCLUDE_DIRS /System/Library/Frameworks)
     FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
     MARK_AS_ADVANCED (OpenGL_LIBRARY)
-    SET(EXTRA_LIBS ${OpenGL_LIBRARY})
+    SET(OPENGL_LIBS ${OpenGL_LIBRARY})
 ELSE (APPLE)
     find_package(OpenGL REQUIRED)
-    list(APPEND SRE_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
+    # list(APPEND SRE_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
     IF(UNIX)
         find_package(GLEW REQUIRED)
     ELSE(UNIX)
         find_package(glew REQUIRED)
     ENDIF(UNIX)
-    list(APPEND SRE_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-    SET(EXTRA_LIBS ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
+    list(APPEND EXTRA_INCLUDE ${GLEW_INCLUDE_DIR})
+    SET(OPENGL_LIBS ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
 ENDIF (APPLE)
 
 find_package(SDL2_IMAGE REQUIRED)
 list(APPEND SRE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIRS})
 
 option(USE_OPENVR "Enable OpenVR" OFF)
-
 set(OPENVR_LIB)
+
+# add submodules
+add_subdirectory(submodules)
+
+# prepare include directory list
+set(SRE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include ${EXTRA_INCLUDE} ${SRE_INCLUDE_DIRS} CACHE PATH "" FORCE)
+include_directories(${SRE_INCLUDE})
+
+# prepare static library list
+set(SRE_LIBRARIES ${OPENGL_LIBS} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${OPENVR_LIB})
+
+# prepare dynamic library list
+set(SRE_LIBRARIES_SHARED ${SDL2_IMAGE_SHARED_LIBS})
+
+#######################################################################
+# Optional dependencies
+#######################################################################
 IF (USE_OPENVR)
-	find_package(OpenVR REQUIRED)
+    find_package(OpenVR REQUIRED)
     list(APPEND SRE_INCLUDE_DIRS ${OPENVR_INCLUDE_DIRS})
 	IF(UNIX)
 		add_definitions(-DSRE_OPENVR)
@@ -67,13 +85,19 @@ IF (USE_OPENVR)
     ELSE(APPLE)
         set(OPENVR_LIB "${OPENVR_ROOT_DIR}/lib/${OPENVR_PLATFORM}/openvr_api.lib")
     ENDIF(APPLE)
-ENDIF(USE_OPENVR)
 
-add_subdirectory(submodules)
-set(SRE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include ${EXTRA_INCLUDE} ${SRE_INCLUDE_DIRS} CACHE PATH "" FORCE)
-include_directories(${SRE_INCLUDE})
+    set(SRE_LIBRARIES SRE    ${SRE_LIBRARIES} ${OPENVR_LIB})
+	set(SRE_LIBRARIES_SHARED ${SDL2_IMAGE_SHARED_LIBS} "${OPENVR_ROOT_DIR}/bin/${OPENVR_PLATFORM}/openvr_api.dll")
+ENDIF (USE_OPENVR)
 
+#######################################################################
+# Create lib
+#######################################################################
 add_subdirectory(src)
+
+#######################################################################
+# Create targets
+#######################################################################
 SET(USE_SRE_EXAMPLES ON CACHE BOOL "Enable examples for SRE")
 if (USE_SRE_EXAMPLES)
     add_subdirectory(examples)
@@ -84,5 +108,3 @@ IF (USE_SRE_TEST_AND_UTILS)
     add_subdirectory(test)
     add_subdirectory(utils)
 ENDIF(USE_SRE_TEST_AND_UTILS)
-set(SRE_LIBRARIES SRE ${EXTRA_LIBS} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${OPENVR_LIB} CACHE PATH "" FORCE)
-
