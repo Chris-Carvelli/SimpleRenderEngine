@@ -68,7 +68,6 @@
 message("<FindSDL2.cmake>")
 
 set(SDL2_SEARCH_PATHS "${SRE_LIBS_PATH}/SDL2")
-message("424242(sdl): " ${SRE_LIBS_PATH})
 		
 FIND_PATH(SDL2_INCLUDE_DIR SDL.h
 		PATH_SUFFIXES include/SDL2 include
@@ -114,6 +113,15 @@ IF(MINGW)
 	SET(MINGW32_LIBRARY mingw32 CACHE STRING "mwindows for MinGW")
 ENDIF(MINGW)
 
+if(WIN32)
+     find_file(SDL2_LIBRARY_SHARED
+        NAMES SDL2.dll
+        PATH_SUFFIXES lib lib/x64 lib/x86
+        PATHS ${SDL2_SEARCH_PATHS}
+		NO_DEFAULT_PATH
+    )
+endif(WIN32)
+
 IF(SDL2_LIBRARY_TEMP)
 	# For SDL2main
 	IF(NOT SDL2_BUILDING_LIBRARY)
@@ -155,3 +163,4 @@ message("</FindSDL2.cmake>")
 INCLUDE(FindPackageHandleStandardArgs)
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2 REQUIRED_VARS SDL2_LIBRARY SDL2_INCLUDE_DIR)
+

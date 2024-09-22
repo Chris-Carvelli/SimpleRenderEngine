@@ -62,7 +62,8 @@ include_directories(${SRE_INCLUDE})
 set(SRE_LIBRARIES ${OPENGL_LIBS} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${OPENVR_LIB})
 
 # prepare dynamic library list
-set(SRE_LIBRARIES_SHARED ${SDL2_IMAGE_SHARED_LIBS})
+
+set(SRE_LIBRARIES_SHARED ${SDL2_IMAGE_SHARED_LIBS} ${SDL2_LIBRARY_SHARED})
 
 #######################################################################
 # Optional dependencies
